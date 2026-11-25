@@ -8,14 +8,27 @@ def load_users():
     users = {}
     with open("users.txt", "r") as file:
         for line in file:
-            username, password = line.strip().split(":")
-            users[username] = password
+            if ":" in line:
+                username, password = line.strip().split(":", 1)
+                users[username] = password
     return users
 
 
 def open_downloads_folder():
-    downloads_path = os.path.join(os.path.expanduser("~"), "Desktop")
-    os.startfile(downloads_path)
+    user_home = os.path.expanduser("~")
+    
+    # Change "Downloads" to "Desktop" if you specifically want the Desktop folder
+    target_folder = "Downloads" 
+    
+    standard_path = os.path.join(user_home, target_folder)
+    onedrive_path = os.path.join(user_home, "OneDrive", target_folder)
+
+    if os.path.exists(standard_path):
+        os.startfile(standard_path)
+    elif os.path.exists(onedrive_path):
+        os.startfile(onedrive_path)
+    else:
+        print(f"Error: Could not find the {target_folder} folder.")
 
 
 def authenticate():
